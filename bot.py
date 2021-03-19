@@ -23,7 +23,8 @@ def start(update, context):
 
 def echo(update, context):
     """Send wiki"""
-    url = f'https://pt.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={update.message.text}'
+    url = f'http://desciclopedia.org/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={update.message.text}'
+    #url = f'https://pt.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={update.message.text}'
     sleep(1)
     response = requests.get(url)
     pages = response.json()['query']['pages']
