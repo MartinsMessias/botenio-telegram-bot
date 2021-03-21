@@ -1,11 +1,13 @@
 import logging
 import requests
 import credentials
+import shodan
 
 from random import randint
 from time import sleep
 from imap_tools import MailBox, A
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -20,6 +22,14 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     context.bot.send_message(chat_id=update.effective_chat.id, text='Eu tô ligado blz.')
 
+
+def shodan(update, context):
+    api = shodan.Shodan(SHODAN_API_KEY)
+    result = api.search(update.message.text)
+
+    # Loop through the matches and print each IP
+    for service in result['matches']:
+        context.bot.send_message(chat_id=update.effective_chat.id, text=service['ip_str'])
 
 def echo(update, context):
     """Send wiki"""
@@ -136,6 +146,7 @@ def main():
     dp.add_handler(CommandHandler("trends", trends))
     dp.add_handler(CommandHandler("mega", mega))
     dp.add_handler(CommandHandler("newsletter", newsletter))
+    dp.add_handler(CommandHandler("shodan", shodan))
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
