@@ -1,7 +1,6 @@
 import logging
 import requests
 import credentials
-import shodan
 
 from random import randint
 from time import sleep
@@ -15,33 +14,51 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
     context.bot.send_message(chat_id=update.effective_chat.id, text='Eu tô ligado blz.')
 
+def do_something(user_input):
+    answer = " 🔍 Procurando computadores conectados a internet pela descrição: " + user_input + "..."
+    return answer
 
 def shodan(update, context):
-    api = shodan.Shodan(SHODAN_API_KEY)
-    result = api.search(update.message.text)
-
-    # Loop through the matches and print each IP
+    user_input = update.message.text
+    user_input = " ".join(filter(lambda x:x[0]!='/', user_input.split()))
+    update.message.reply_text(do_something(user_input))
+    
+    url = f'https://api.shodan.io/shodan/host/search?key=fERRYbmCv2CM00m1AdmqSnmBaXujBIcv&query={user_input}'
+    result = requests.get(url).json()
+    count = 0
     for service in result['matches']:
-        context.bot.send_message(chat_id=update.effective_chat.id, text=service['ip_str'])
+        try:
+            msg = f"Tipo: {service['product']}\nISP: {service['isp']}\nIP: {service['ip_str']}\nPORTA ABERTA: {service['port']}\nLOCALIZAÇÃO: {service['location']['city']} / {service['location']['country_name']}"
+            context.bot.send_message(chat_id=update.effective_chat.id, text=msg)
+            count += 1
+            if count == 10:
+                break
+        except:
+            pass
+    return context.bot.send_message(chat_id=update.effective_chat.id, text=" 🔍 Busca finalizada - LIMIT 10 🔚")
 
 def echo(update, context):
     """Send wiki"""
+    if update.message.text.split(' ')[0] == '/shodan':
+        return shodan(update, context)
+    
     url = f'http://desciclopedia.org/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={update.message.text}'
     #url = f'https://pt.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={update.message.text}'
     sleep(1)
     response = requests.get(url)
     pages = response.json()['query']['pages']
-
-    for page_num in pages:
-        extract = response.json()['query']['pages'][str(page_num)]['extract']
-    return context.bot.send_message(chat_id=update.effective_chat.id, text=extract)
+    try:
+        for page_num in pages:
+            extract = response.json()['query']['pages'][str(page_num)]['extract']
+        return context.bot.send_message(chat_id=update.effective_chat.id, text=extract)
+    except:
+        pass
 
 
 def newsletter(update, context):
