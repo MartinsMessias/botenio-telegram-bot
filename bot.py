@@ -50,10 +50,8 @@ def start(update, context):
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text='O pai tá ON, qual é a boa? ')
-    try:
-        bot.sendSticker(chat_id=update.effective_chat.id, sticker='https://raw.githubusercontent.com/MartinsMessias/telegram-bots-python/master/InfoBot/stickers/STK-20200321-WA0200.webp')
-    except:
-        pass
+    bot.sendAnimation(chat_id=update.effective_chat.id, animation='https://img.memecdn.com/like-a-sir-gif_o_526896.gif')
+   
 
 def help(update, context):
     """Send a message when the command /help is issued."""
