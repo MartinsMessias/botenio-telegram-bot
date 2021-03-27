@@ -1,5 +1,5 @@
 requests==2.24.0
 imap_tools
 python-telegram==0.14.0
-python-telegram-bot==13.4.1
+python-telegram-bot
 shodan
