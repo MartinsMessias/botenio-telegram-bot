@@ -11,7 +11,7 @@ def newsletter(update, context):
     try:
         bot.sendChatAction(chat_id=update.effective_chat.id,
                            action=telegram.ChatAction.TYPING)
-                           
+
         msg = news_letter.newsletter()
 
         for m in msg:
@@ -22,7 +22,7 @@ def newsletter(update, context):
 
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=f'⏳ ATUALIZADO EM ({str(date.today())})')
+            text=f'CACHE ATUALIZADO EM ({str(date.today())})')
     except BaseException:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
