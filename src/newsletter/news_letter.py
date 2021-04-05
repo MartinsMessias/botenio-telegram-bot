@@ -1,9 +1,21 @@
+import redis
+import os
+
 from imap_tools import A, MailBox
 from src.extra import credentials
+from datetime import date
+
+# Heroku Redis to Go
+cache = redis.from_url(os.environ.get("REDISTOGO_URL"))
 
 
 def newsletter():
     """Returns Filipe Deschamps NewsLetter"""
+    today = str(date.today())
+
+    if cache.exists(today):
+        newsletters = cache.get(today).decode('utf-8')
+        return newsletters
 
     SMTP_SERVER = "imap.gmail.com"
     SMTP_PORT = 993
@@ -19,4 +31,6 @@ def newsletter():
         for m in msg:
             if 'https://' not in m:
                 messages.append(m)
+
+    cache.mset({str(date.today()): messages})
     return messages
