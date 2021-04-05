@@ -1,10 +1,12 @@
-import redis
-import os
 import json
-
-from imap_tools import A, MailBox
-from src.extra import credentials
+import os
+from dataclasses import replace
 from datetime import date
+
+import redis
+from imap_tools import A, MailBox
+
+from src.extra import credentials
 
 # Heroku Redis to Go
 cache = redis.from_url(os.environ.get("REDISTOGO_URL"))
@@ -28,6 +30,7 @@ def newsletter():
         msg = [msg for msg in emails][-1]
         data = msg.headers['date'][0]
         msg = msg.text.split('\r\n\r\n')
+        msg = msg.replace('\r\n', ' ')
 
         for m in msg:
             if 'https://' not in m:
