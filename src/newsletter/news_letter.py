@@ -30,9 +30,9 @@ def newsletter():
         msg = [msg for msg in emails][-1]
         data = msg.headers['date'][0]
         msg = msg.text.split('\r\n\r\n')
-        msg = msg.replace('\r\n', ' ')
 
         for m in msg:
+            m = m.replace('\r\n', ' ')
             if 'https://' not in m:
                 messages.append(m)
 
