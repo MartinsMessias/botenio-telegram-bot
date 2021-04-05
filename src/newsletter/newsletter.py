@@ -1,39 +1,28 @@
 from imap_tools import MailBox, A
 from time import sleep
 from src.extra import bot, telegram, credentials
+from src.newsletter import news_letter
+from datetime import date
 
 
 def newsletter(update, context):
     """Send updated Filipe Deschamps NewsLetter"""
-    bot.sendChatAction(
-        chat_id=update.effective_chat.id,
-        action=telegram.ChatAction.TYPING)
 
-    SMTP_SERVER = "imap.gmail.com"
-    SMTP_PORT = 993
-
-    messages = []
     try:
-        with MailBox(SMTP_SERVER).login(credentials.FROM_EMAIL, credentials.FROM_PWD, 'INBOX') as mailbox:
-            emails = mailbox.fetch(
-                A(from_='newsletter@filipedeschamps.com.br'))
-            msg = [msg for msg in emails][-1]
-            date = msg.headers['date'][0]
-            msg = msg.text.split('\r\n\r\n')
+        bot.sendChatAction(chat_id=update.effective_chat.id,
+                           action=telegram.ChatAction.TYPING)
+                           
+        msg = news_letter.newsletter()
 
-            bot.sendChatAction(
-                chat_id=update.effective_chat.id,
-                action=telegram.ChatAction.TYPING)
-
-            for m in msg:
-                if 'https://' not in m:
-                    context.bot.send_message(
-                        chat_id=update.effective_chat.id, text=f'📍\n{m}')
-                    sleep(0.45)
+        for m in msg:
+            bot.sendChatAction(chat_id=update.effective_chat.id,
+                               action=telegram.ChatAction.TYPING)
+            context.bot.send_message(
+                chat_id=update.effective_chat.id, text=f'📍\n{m}')
 
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=f'⏳ ATUALIZADO EM ({date})')
+            text=f'⏳ ATUALIZADO EM ({str(date.today())})')
     except BaseException:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
