@@ -1,11 +1,10 @@
 import json
 import os
-from dataclasses import replace
-from datetime import date
-
 import redis
-from imap_tools import A, MailBox
 
+
+from imap_tools import A, MailBox
+from datetime import date
 from src.extra import credentials
 
 # Heroku Redis to Go
