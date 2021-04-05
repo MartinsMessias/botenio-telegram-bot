@@ -25,12 +25,13 @@ def newsletter():
         emails = mailbox.fetch(
             A(from_='newsletter@filipedeschamps.com.br'))
         msg = [msg for msg in emails][-1]
-        date = msg.headers['date'][0]
+        data = msg.headers['date'][0]
         msg = msg.text.split('\r\n\r\n')
 
         for m in msg:
             if 'https://' not in m:
                 messages.append(m)
-
+                
+    messages.append(data)
     cache.mset({str(date.today()): messages})
     return messages
