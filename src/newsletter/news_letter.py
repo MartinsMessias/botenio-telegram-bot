@@ -16,7 +16,7 @@ def newsletter():
 
     if cache.exists(today):
         newsletters = cache.get(today).decode('utf-8')
-        return newsletters
+        return json.loads(newsletters)
 
     SMTP_SERVER = "imap.gmail.com"
     SMTP_PORT = 993
