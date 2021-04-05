@@ -1,5 +1,6 @@
 import redis
 import os
+import json
 
 from imap_tools import A, MailBox
 from src.extra import credentials
@@ -31,7 +32,7 @@ def newsletter():
         for m in msg:
             if 'https://' not in m:
                 messages.append(m)
-                
+
     messages.append(data)
-    cache.mset({str(date.today()): messages})
+    cache.mset({today: json.dumps(messages)})
     return messages
