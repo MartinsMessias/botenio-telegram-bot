@@ -22,20 +22,23 @@ logger = logging.getLogger(__name__)
 def define_command(update, context):
     """Return the commad called by user"""
     valid_cmd = ['/shodan', '/desciclopedia', '/wikipedia']
-    command = update.message.text.split(' ')[0]
+    if update.message is not None:
+        command = update.message.text
+    else:
+        command = update.edited_message.text
 
-    if len(update.message.text.split(' ')) <= 1 and command in valid_cmd:
+    command_splited = command.split(' ')[0]
+
+    if len(command.split(' ')) <= 1 and command_splited in valid_cmd:
         return context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text=f'Sintaxe dos comandos: \n{command} argumento')
+            text=f'Sintaxe dos comandos: \n{command_splited} argumento')
 
-    command = update.message.text.split(' ')[0]
-
-    if command == '/shodan':
+    if command_splited == '/shodan':
         return shodan(update, context)
-    elif command == '/desciclopedia':
+    elif command_splited == '/desciclopedia':
         return desciclopedia(update, context)
-    elif command == '/wikipedia':
+    elif command_splited == '/wikipedia':
         return wikipedia(update, context)
     return context.bot.send_message(
         chat_id=update.effective_chat.id,
@@ -50,8 +53,7 @@ def start(update, context):
     context.bot.send_message(
         chat_id=update.effective_chat.id,
         text='O pai tá ON, qual é a boa? ')
-    bot.sendAnimation(chat_id=update.effective_chat.id, animation='https://img.memecdn.com/like-a-sir-gif_o_526896.gif')
-   
+
 
 def help(update, context):
     """Send a message when the command /help is issued."""

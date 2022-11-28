@@ -8,7 +8,8 @@ from datetime import date
 from src.extra import credentials
 
 # Heroku Redis to Go
-cache = redis.from_url(os.environ.get("REDISTOGO_URL"))
+# cache = redis.from_url(os.environ.get("REDISTOGO_URL"))
+cache = redis.Redis()
 
 
 def newsletter():

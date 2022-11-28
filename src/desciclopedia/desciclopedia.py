@@ -5,7 +5,10 @@ def desciclopedia(update, context):
     """Desciclopedia search"""
     bot.sendChatAction(chat_id=update.effective_chat.id,
                        action=telegram.ChatAction.TYPING)
-    user_input = update.message.text
+    if update.message is None:
+        user_input = update.edited_message.text
+    else:
+        user_input = update.message.text
     user_input = " ".join(filter(lambda x: x[0] != '/', user_input.split()))
 
     url = f'http://desciclopedia.org/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={user_input}'

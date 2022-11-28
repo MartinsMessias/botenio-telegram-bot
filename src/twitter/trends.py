@@ -12,7 +12,7 @@ def trends(update, context):
     try:
         hed = {'Authorization': 'Bearer ' + credentials.TWITTER_TOKEN}
 
-        url = 'https://api.twitter.com/1.1/trends/place.json?id=1'
+        url = 'https://api.twitter.com/1.1/trends/place.json?id=455827'
         response = requests.get(url, headers=hed)
 
         data = []
@@ -22,17 +22,23 @@ def trends(update, context):
             clean_trend = {}
 
             if trend['promoted_content'] is None:
+                volume = trend['tweet_volume']
+                if not volume or volume == "":
+                    continue
                 clean_trend['name'] = trend['name']
-                clean_trend['volume'] = trend['tweet_volume']
+                clean_trend['volume'] = int(volume)
                 clean_trend['url'] = trend['url']
 
             data.append(clean_trend)
 
-        for trend in data:
-            sleep(0.5)
-            context.bot.send_message(
-                chat_id=update.effective_chat.id,
-                text=f"Assunto: {trend['name']}\nTweets: {trend['volume']}\n{'_' * 30}")
+        data = sorted(data, key=lambda d: d['volume'], reverse=True)
+
+        message = "🐥 Top 10 tendências no Brasil\n"
+        for trend in data[:10]:
+            message += f'\n {data.index(trend) + 1} - {trend["name"]} \nMensões: {trend["volume"]}\n'
+
+        context.bot.send_message(
+            chat_id=update.effective_chat.id, text=message)
     except BaseException:
         return context.bot.send_message(
             chat_id=update.effective_chat.id,
