@@ -1,7 +1,8 @@
 import os
 import requests
 import telegram
-from bot import bot
+from src.bot_instance import bot
+
 
 BASE_URL = 'https://pt.wikipedia.org/w/api.php'
 

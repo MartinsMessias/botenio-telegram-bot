@@ -5,7 +5,7 @@ import random
 import os
 import requests
 import telegram
-from bot import bot
+from src.bot_instance import bot
 
 
 BASE_URL = 'https://api.shodan.io/shodan/host/'
@@ -19,6 +19,7 @@ def shodan(update, context):
 
     if update.message is None:
         user_input = update.edited_message.text
+        f=True
     else:
         user_input = update.message.text
     user_input = " ".join(filter(lambda x: x[0] != '/', user_input.split()))
@@ -30,8 +31,9 @@ def shodan(update, context):
         results_count_limit = int(user_input[1].replace(' ', ''))
         user_input = user_input[0]
 
-    update.message.reply_text(
-        f'🔍 Procurando computadores conectados a internet pela descrição: {user_input}...')
+    if not f:
+        update.message.reply_text(
+            f'🔍 Procurando computadores conectados a internet pela descrição: {user_input}...')
 
     url = f'{BASE_URL}search?key={os.environ.get("SHODAN_API_KEY")}&query={user_input}'
 

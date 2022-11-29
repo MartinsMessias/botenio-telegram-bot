@@ -6,6 +6,7 @@ import os
 import telegram
 
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
+from src.bot_instance import bot
 
 # Import all functions here
 from src.desciclopedia.desciclopedia import desciclopedia
@@ -21,7 +22,7 @@ logging.basicConfig(
     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
+
 
 
 def define_command(update, context):

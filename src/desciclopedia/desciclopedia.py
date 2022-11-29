@@ -4,7 +4,7 @@ Search for a term in the 'desciclopedia' wiki and return the first paragraph.
 import os
 import requests
 import telegram
-from bot import bot
+from src.bot_instance import bot
 
 
 def desciclopedia(update, context):

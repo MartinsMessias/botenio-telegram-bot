@@ -4,7 +4,8 @@ Get Twitter trending topics from Brazil (São Paulo) and list the 10 most mentio
 import os
 import requests
 import telegram
-from bot import bot
+from src.bot_instance import bot
+
 
 BASE_URL = 'https://api.twitter.com/1.1/'
 
