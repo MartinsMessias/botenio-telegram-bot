@@ -33,7 +33,7 @@ def mega(update, context):
 
         {sorted_numbers[0]} - {sorted_numbers[1]} - {sorted_numbers[2]} - {sorted_numbers[3]} - {sorted_numbers[4]} - {sorted_numbers[5]}
 
-Quantas vezes cada número foi já foi sorteado:
+Quantas vezes cada número já foi sorteado:
 
 {table}
 🔥 {freq_sum}
