@@ -5,7 +5,7 @@ import random
 import os
 import requests
 import telegram
-from src.bot_instance import bot
+from src.bot_instance import get_bot_instance
 
 
 BASE_URL = 'https://api.shodan.io/shodan/host/'
@@ -13,6 +13,7 @@ BASE_URL = 'https://api.shodan.io/shodan/host/'
 
 def shodan(update, context):
     """Shodan search"""
+    bot = get_bot_instance()
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)
@@ -22,6 +23,7 @@ def shodan(update, context):
         f=True
     else:
         user_input = update.message.text
+        f=False
     user_input = " ".join(filter(lambda x: x[0] != '/', user_input.split()))
 
     results_count_limit = 10

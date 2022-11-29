@@ -1,7 +1,7 @@
 import os
 import requests
 import telegram
-from src.bot_instance import bot
+from src.bot_instance import get_bot_instance
 
 
 BASE_URL = 'https://pt.wikipedia.org/w/api.php'
@@ -9,6 +9,7 @@ BASE_URL = 'https://pt.wikipedia.org/w/api.php'
 
 def wikipedia(update, context):
     """Wikipedia search"""
+    bot = get_bot_instance()
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)

@@ -6,7 +6,7 @@ import os
 import telegram
 
 from telegram.ext import CommandHandler, Filters, MessageHandler, Updater
-from src.bot_instance import bot
+from src.bot_instance import get_bot_instance
 
 # Import all functions here
 from src.desciclopedia.desciclopedia import desciclopedia
@@ -53,6 +53,7 @@ def define_command(update, context):
 
 def start(update, context):
     """Send a message when the command /start is issued."""
+    bot = get_bot_instance()
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)

@@ -4,7 +4,7 @@ Get Twitter trending topics from Brazil (São Paulo) and list the 10 most mentio
 import os
 import requests
 import telegram
-from src.bot_instance import bot
+from src.bot_instance import get_bot_instance
 
 
 BASE_URL = 'https://api.twitter.com/1.1/'
@@ -12,6 +12,7 @@ BASE_URL = 'https://api.twitter.com/1.1/'
 
 def trends(update, context):
     """Get Twitter trending topics"""
+    bot = get_bot_instance()
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)
