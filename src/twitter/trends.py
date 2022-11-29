@@ -1,30 +1,36 @@
-from src.extra import bot, telegram, credentials, requests
-from time import sleep
+"""
+Get Twitter trending topics from Brazil (São Paulo) and list the 10 most mentioned.
+"""
+import os
+import requests
+import telegram
+
+
+BASE_URL = 'https://api.twitter.com/1.1/'
 
 
 def trends(update, context):
     """Get Twitter trending topics"""
-
+    bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)
 
     try:
-        hed = {'Authorization': 'Bearer ' + credentials.TWITTER_TOKEN}
-
-        url = 'https://api.twitter.com/1.1/trends/place.json?id=455827'
-        response = requests.get(url, headers=hed)
+        hed = {'Authorization': 'Bearer ' + os.environ.get('TWITTER_TOKEN')}
+        url = f'{BASE_URL}/trends/place.json?id=455827'
+        response = requests.get(url, headers=hed, timeout=5)
 
         data = []
-
         for trend in response.json()[0]['trends']:
-
             clean_trend = {}
 
             if trend['promoted_content'] is None:
                 volume = trend['tweet_volume']
+
                 if not volume or volume == "":
                     continue
+
                 clean_trend['name'] = trend['name']
                 clean_trend['volume'] = int(volume)
                 clean_trend['url'] = trend['url']
@@ -35,7 +41,8 @@ def trends(update, context):
 
         message = "🐥 Top 10 tendências no Brasil\n"
         for trend in data[:10]:
-            message += f'\n {data.index(trend) + 1} - {trend["name"]} \nMensões: {trend["volume"]}\n'
+            message += f'\n {data.index(trend) + 1} '\
+                ' - {trend["name"]} \nMensões: {trend["volume"]}\n'
 
         context.bot.send_message(
             chat_id=update.effective_chat.id, text=message)

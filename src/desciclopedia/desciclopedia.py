@@ -1,8 +1,14 @@
-from src.extra import bot, telegram, credentials, requests
+"""
+Search for a term in the 'desciclopedia' wiki and return the first paragraph.
+"""
+import os
+import requests
+import telegram
 
 
 def desciclopedia(update, context):
     """Desciclopedia search"""
+    bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
     bot.sendChatAction(chat_id=update.effective_chat.id,
                        action=telegram.ChatAction.TYPING)
     if update.message is None:
@@ -11,10 +17,11 @@ def desciclopedia(update, context):
         user_input = update.message.text
     user_input = " ".join(filter(lambda x: x[0] != '/', user_input.split()))
 
-    url = f'http://desciclopedia.org/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={user_input}'
+    url = 'http://desciclopedia.org/api.php?format=json&action=' \
+        'query&prop=extracts&exintro&explaintext&redirects=1&titles=' + user_input
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=5)
         pages = response.json()['query']['pages']
 
         for page_num in pages:

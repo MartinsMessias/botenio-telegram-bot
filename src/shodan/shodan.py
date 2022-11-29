@@ -1,8 +1,18 @@
+"""
+Search in shodan for a term and return the firsts results.
+"""
 import random
-from src.extra import bot, telegram, credentials, requests
+import os
+import requests
+import telegram
+
+
+BASE_URL = 'https://api.shodan.io/shodan/host/'
 
 
 def shodan(update, context):
+    """Shodan search"""
+    bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)
@@ -23,14 +33,14 @@ def shodan(update, context):
     update.message.reply_text(
         f'🔍 Procurando computadores conectados a internet pela descrição: {user_input}...')
 
-    url = f'https://api.shodan.io/shodan/host/search?key={credentials.SHODAN_API_KEY}&query={user_input}'
+    url = f'{BASE_URL}search?key={os.environ.get("SHODAN_API_KEY")}&query={user_input}'
 
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)
 
     try:
-        result = requests.get(url).json()
+        result = requests.get(url, timeout=5).json()
         results_count = 0
 
         if result['total'] == 0 or not result:

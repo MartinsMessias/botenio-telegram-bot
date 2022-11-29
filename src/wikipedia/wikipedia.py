@@ -1,9 +1,13 @@
-from src.extra import bot, telegram, credentials, requests
+import os
+import requests
+import telegram
+
+BASE_URL = 'https://pt.wikipedia.org/w/api.php'
 
 
 def wikipedia(update, context):
     """Wikipedia search"""
-
+    bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)
@@ -14,10 +18,10 @@ def wikipedia(update, context):
         user_input = update.message.text
     user_input = " ".join(filter(lambda x: x[0] != '/', user_input.split()))
 
-    url = f'https://pt.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={user_input}'
+    url = f'{BASE_URL}?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={user_input}'
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=5)
         pages = response.json()['query']['pages']
 
         for page_num in pages:
