@@ -1,12 +1,19 @@
+import telegram
 import random
 import prettytable as pt
 from telegram import ParseMode
 from src.mega.frequencia import check_frequence, get_info, check_frequence_range
+from src.bot_instance import get_bot_instance
 
 
 def mega(update, context):
     """Send 6 random numbers"""
+    bot = get_bot_instance()
+    bot.sendChatAction(
+    chat_id=update.effective_chat.id,
+    action=telegram.ChatAction.CHOOSE_STICKER)
     try:
+        
         sort = []
 
         while len(sort) < 6:
