@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: botenio-service
+    hostname: botenio-service
+    image: "botenio-service"
+    env_file:
+      - .env
