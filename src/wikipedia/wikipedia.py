@@ -1,13 +1,13 @@
 import os
 import requests
 import telegram
+from bot import bot
 
 BASE_URL = 'https://pt.wikipedia.org/w/api.php'
 
 
 def wikipedia(update, context):
     """Wikipedia search"""
-    bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)

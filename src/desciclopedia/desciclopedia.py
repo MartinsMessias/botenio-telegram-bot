@@ -4,11 +4,11 @@ Search for a term in the 'desciclopedia' wiki and return the first paragraph.
 import os
 import requests
 import telegram
+from bot import bot
 
 
 def desciclopedia(update, context):
     """Desciclopedia search"""
-    bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
     bot.sendChatAction(chat_id=update.effective_chat.id,
                        action=telegram.ChatAction.TYPING)
     if update.message is None:

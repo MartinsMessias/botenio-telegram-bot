@@ -4,14 +4,13 @@ Get Twitter trending topics from Brazil (São Paulo) and list the 10 most mentio
 import os
 import requests
 import telegram
-
+from bot import bot
 
 BASE_URL = 'https://api.twitter.com/1.1/'
 
 
 def trends(update, context):
     """Get Twitter trending topics"""
-    bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)
@@ -42,7 +41,7 @@ def trends(update, context):
         message = "🐥 Top 10 tendências no Brasil\n"
         for trend in data[:10]:
             message += f'\n {data.index(trend) + 1} '\
-                ' - {trend["name"]} \nMensões: {trend["volume"]}\n'
+                f' - {trend["name"]} \nMensões: {trend["volume"]}\n'
 
         context.bot.send_message(
             chat_id=update.effective_chat.id, text=message)

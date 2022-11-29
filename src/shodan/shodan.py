@@ -5,6 +5,7 @@ import random
 import os
 import requests
 import telegram
+from bot import bot
 
 
 BASE_URL = 'https://api.shodan.io/shodan/host/'
@@ -12,7 +13,6 @@ BASE_URL = 'https://api.shodan.io/shodan/host/'
 
 def shodan(update, context):
     """Shodan search"""
-    bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)

@@ -21,6 +21,7 @@ logging.basicConfig(
     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
+bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
 
 
 def define_command(update, context):
@@ -51,7 +52,6 @@ def define_command(update, context):
 
 def start(update, context):
     """Send a message when the command /start is issued."""
-    bot = telegram.Bot(token=os.environ.get('TELEGRAM_TOKEN'))
     bot.sendChatAction(
         chat_id=update.effective_chat.id,
         action=telegram.ChatAction.TYPING)
